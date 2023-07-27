@@ -1,0 +1,7 @@
+*~
+Debug/
+Debug/*
+Debug/**
+*.o
+example.txt
+
