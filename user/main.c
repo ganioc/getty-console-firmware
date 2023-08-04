@@ -117,10 +117,14 @@ int main(void)
   {
     at32_led_toggle(LED2);
     delay_ms(g_speed * DELAY);
-    at32_led_toggle(LED3);
-    delay_ms(g_speed * DELAY);
-    at32_led_toggle(LED4);
-    delay_ms(g_speed * DELAY);
+//    at32_led_toggle(LED3);
+//    delay_ms(g_speed * DELAY);
+//    at32_led_toggle(LED4);
+//    delay_ms(g_speed * DELAY);
+    if(uart2_get_rx_flag() == 1){
+    	uart2_clear_rx_flag();
+    	printf("rx sth.\r\n");
+    }
   }
 }
 

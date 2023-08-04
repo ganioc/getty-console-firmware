@@ -166,6 +166,7 @@ void at32_board_init()
 
   /* debug uart init  */
   uart_print_init(115200);
+  uart2_init(115200);
 
 }
 

@@ -128,6 +128,22 @@ void delay_sec(uint16_t sec);
 /* printf uart init function */
 void uart_print_init(uint32_t baudrate);
 
+/********  Uart 2 *********/
+#define D2_UART                       USART2
+#define D2_UART_CRM_CLK               CRM_USART2_PERIPH_CLOCK
+#define D2_UART_TX_PIN                GPIO_PINS_2
+#define D2_UART_RX_PIN                GPIO_PINS_3
+#define D2_UART_TX_GPIO               GPIOA
+#define D2_UART_TX_GPIO_CRM_CLK       CRM_GPIOA_PERIPH_CLOCK
+#define D2_UART_IRQn                  USART2_IRQn
+
+#define UART2_BUFFER_LEN              64
+
+void uart2_init(uint32_t baudrate);
+uint8_t uart2_get_rx_flag();
+void uart2_clear_rx_flag();
+
+
 /**
   * @}
   */
