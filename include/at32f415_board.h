@@ -142,6 +142,11 @@ void uart_print_init(uint32_t baudrate);
 void uart2_init(uint32_t baudrate);
 uint8_t uart2_get_rx_flag();
 void uart2_clear_rx_flag();
+uint8_t uart2_get_rx_len();
+uint8_t * uart2_get_rx_buf();
+//void uart2_tx_send(uint8_t*buf, uint16_t len);
+uint8_t uart2_get_tx_flag();
+void uart2_tx_printf(char* format, ...);
 
 
 /**

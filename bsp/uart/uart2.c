@@ -7,6 +7,10 @@
 
 #include "at32f415_board.h"
 
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+
 uint8_t uart2_rx_buffer[UART2_BUFFER_LEN];
 uint8_t uart2_rx_tail = 0;
 uint8_t uart2_rx_head = 0;
@@ -16,7 +20,7 @@ uint8_t uart2_tx_tail = 0;
 uint8_t uart2_tx_head = 0;
 
 uint8_t uart2_rx_flag = 0; // 1 received packet ,
-
+uint8_t uart2_tx_flag = 0; // 1 tx packet succeed ,
 
 
 void uart2_init(uint32_t baudrate){
@@ -76,7 +80,7 @@ void USART2_IRQHandler(void)
     if(usart_flag_get(D2_UART, USART_IDLEF_FLAG) != RESET){
   	  // read from the rx buffer,
 
-    	uart2_rx_head = 0;
+
     	uart2_rx_flag = 1;
 
     	usart_interrupt_enable(D2_UART, USART_IDLE_INT, FALSE);
@@ -87,17 +91,21 @@ void USART2_IRQHandler(void)
   {
     if(usart_flag_get(D2_UART, USART_TDBE_FLAG) != RESET)
     {
+      printf(".");
+
       /* write one byte to the transmit data register */
       usart_data_transmit(D2_UART, uart2_tx_buffer[uart2_tx_tail++]);
 
-      if (uart2_tx_tail >= UART2_BUFFER_LEN){
-    	  uart2_tx_tail = 0;
-      }
+//      if (uart2_tx_tail >= UART2_BUFFER_LEN){
+//    	  uart2_tx_tail = 0;
+//      }
 
       if(uart2_tx_tail == uart2_tx_head)
       {
         /* disable the usart3 transmit interrupt */
         usart_interrupt_enable(D2_UART, USART_TDBE_INT, FALSE);
+        uart2_tx_head = 0;
+        uart2_tx_flag = 1;
       }
     }
   }
@@ -107,5 +115,51 @@ uint8_t uart2_get_rx_flag(){
 }
 void uart2_clear_rx_flag(){
 	uart2_rx_flag = 0;
+	uart2_rx_head = 0;
+}
+uint8_t uart2_get_rx_len(){
+	return uart2_rx_head;
+}
+uint8_t * uart2_get_rx_buf(){
+	return uart2_rx_buffer;
+}
+void uart2_tx_send(uint8_t*buf, uint16_t len){
+	uart2_tx_head = 0;
+	for(int i = 0; i< len; i++){
+		uart2_tx_buffer[uart2_tx_head++] = buf[i];
+		if(uart2_tx_head >= UART2_BUFFER_LEN){
+			break;
+		}
+	}
+	uart2_tx_head--;
+
+	uart2_tx_flag = 0;
+	uart2_tx_tail = 0;
+	usart_interrupt_enable(D2_UART, USART_TDBE_INT, TRUE);
+}
+uint8_t uart2_get_tx_flag(){
+	return uart2_tx_flag;
+}
+
+void uart2_tx_printf(char* format, ...){
+	char temp[UART2_BUFFER_LEN];
+
+	va_list args_list;
+
+	va_start(args_list, format);
+
+	vsprintf(temp, format, args_list);
+
+	//printf(temp);
+
+//	for(int i = 0; i< strlen(temp); i++){
+//		buffer[buffer_head++] = temp[i];
+//		if(buffer_head >= SIMU_UART_BUFFER_LEN){
+//			buffer_head = 0;
+//		}
+//	}
+	uart2_tx_send(temp, strlen(temp));
+
+	va_end(args_list);
 }
 

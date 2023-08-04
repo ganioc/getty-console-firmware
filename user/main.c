@@ -28,12 +28,12 @@
 /** @addtogroup AT32F415_periph_template
   * @{
   */
-
+#include <string.h>
 /** @addtogroup 415_LED_toggle LED_toggle
   * @{
   */
 
-#define DELAY                            100
+#define DELAY                            500
 #define FAST                             1
 #define SLOW                             4
 
@@ -105,6 +105,9 @@ void EXINT0_IRQHandler(void)
   */
 int main(void)
 {
+  uint8_t *buf = uart2_get_rx_buf();
+  char  tx_buf[128];
+
   system_clock_config();
 
   at32_board_init();
@@ -122,9 +125,18 @@ int main(void)
 //    at32_led_toggle(LED4);
 //    delay_ms(g_speed * DELAY);
     if(uart2_get_rx_flag() == 1){
+
+    	for(int i =0; i< uart2_get_rx_len(); i++){
+    		printf("%c", buf[i]);
+    	}
+
     	uart2_clear_rx_flag();
     	printf("rx sth.\r\n");
+
     }
+//	sprintf(tx_buf, "%s","higogo");
+//	uart2_tx_send(tx_buf, strlen(tx_buf));
+    uart2_tx_printf("begin...end\n");
   }
 }
 
