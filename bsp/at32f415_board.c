@@ -142,6 +142,7 @@ void uart_print_init(uint32_t baudrate)
   usart_enable(PRINT_UART, TRUE);
 }
 
+
 /**
   * @brief  board initialize interface init led and button
   * @param  none
@@ -162,6 +163,10 @@ void at32_board_init()
 
   /* configure button in at_start board */
   at32_button_init();
+
+  /* debug uart init  */
+  uart_print_init(115200);
+
 }
 
 /**

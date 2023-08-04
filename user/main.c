@@ -109,7 +109,9 @@ int main(void)
 
   at32_board_init();
 
-  button_exint_init();
+  printf("hello console\r\n");
+
+//  button_exint_init();
 
   while(1)
   {
