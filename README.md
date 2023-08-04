@@ -1,4 +1,6 @@
 ## console AT32F415
+Use AT32 Eclipse Editor
+
 
 ## Interfaces
 ### I2C
