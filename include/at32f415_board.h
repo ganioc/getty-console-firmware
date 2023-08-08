@@ -148,6 +148,24 @@ uint8_t * uart2_get_rx_buf();
 uint8_t uart2_get_tx_flag();
 void uart2_tx_printf(char* format, ...);
 
+/********* I2C ***********/
+#define I2C1_SCL_PIN                     GPIO_PINS_8
+#define I2C1_SCL_GPIO_PORT               GPIOB
+#define I2C1_SCL_GPIO_CLK                CRM_GPIOB_PERIPH_CLOCK
+#define I2C1_SCL_PIN_MUX_NUM             GPIO_MUX_2
+
+#define I2C1_SDA_PIN                     GPIO_PINS_9
+#define I2C1_SDA_GPIO_PORT               GPIOB
+#define I2C1_SDA_GPIO_CLK                CRM_GPIOB_PERIPH_CLOCK
+
+#define I2C1_SPEED                       400000
+#define I2C1_OLED_ADDRESS                0x78
+
+#define I2C1_PORT                        I2C1
+#define I2C1_CLK                         CRM_I2C1_PERIPH_CLOCK
+
+void init_i2c_1();
+void i2c_write_oled_cmd();
 
 /**
   * @}

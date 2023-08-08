@@ -168,6 +168,8 @@ void at32_board_init()
   uart_print_init(115200);
   uart2_init(115200);
 
+  init_i2c_1();
+
 }
 
 /**

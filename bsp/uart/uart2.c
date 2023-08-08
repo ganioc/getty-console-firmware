@@ -91,7 +91,7 @@ void USART2_IRQHandler(void)
   {
     if(usart_flag_get(D2_UART, USART_TDBE_FLAG) != RESET)
     {
-      printf(".");
+      //printf(".");
 
       /* write one byte to the transmit data register */
       usart_data_transmit(D2_UART, uart2_tx_buffer[uart2_tx_tail++]);

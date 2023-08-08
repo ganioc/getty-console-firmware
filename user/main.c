@@ -137,6 +137,8 @@ int main(void)
 //	sprintf(tx_buf, "%s","higogo");
 //	uart2_tx_send(tx_buf, strlen(tx_buf));
     uart2_tx_printf("begin...end\n");
+
+    i2c_write_oled_cmd();
   }
 }
 
