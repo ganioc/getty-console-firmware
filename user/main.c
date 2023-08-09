@@ -117,15 +117,31 @@ int main(void)
 //  button_exint_init();
 
   oled_init();
-
-
   oled_all_clear();
-//
-  oled_all_on();
 
-  oled_all_clear();
+  oled_reset_display();
+
+
 //
 //  oled_all_on();
+//
+//  oled_all_clear();
+//
+//  oled_all_on();
+
+  for(int i=0; i< 10; i++){
+	  oled_set_pixel(2,32+i);
+  }
+  for(int i=0; i< 128; i++){
+	  oled_set_pixel(i,0);
+	  oled_set_pixel(i,63);
+  }
+  for(int i=0; i< 64; i++){
+	  oled_set_pixel(0,i);
+	  oled_set_pixel(127, i);
+  }
+
+  oled_display_from_buffer();
 
 
   while(1)

@@ -6,10 +6,15 @@
  */
 
 #include "at32f415_board.h"
+#include <string.h>
 
 uint8_t buf[128] = {0};
+
+uint8_t display_buffer[OLED_SH1102_SCREEN_WIDTH * OLED_SH1102_SCREEN_HEIGHT /8];
 //uint8_t buf_zero[OLED_SH1102_WIDTH] = {0};
 //uint8_t buf_one[OLED_SH1102_WIDTH] = {0xFF};
+
+uint8_t oled_color = WHITE;
 
 void oled_write_cmd(uint8_t reg, uint8_t* tx_buf, uint8_t tx_len){
 	i2c_write_cmd(I2C1_OLED_ADDRESS, reg, tx_buf,  tx_len);
@@ -68,6 +73,7 @@ void oled_init(){
 	// Turn ON
 	oled_write_cmd_byte(0xAF);
 }
+
 void oled_all_clear(){
 	for(int i = 0; i< OLED_SH1102_WIDTH; i++){
 		buf[i] = 0x00;
@@ -107,5 +113,61 @@ void oled_all_on(){
 
 	}
 }
+void oled_display_off(){
+	oled_write_cmd_byte(0xAE);  // display off
+}
+void oled_display_on(){
+	oled_write_cmd_byte(0xAF);
+}
+void oled_clear_buffer(void){
+	memset(display_buffer, 0, (OLED_SH1102_SCREEN_WIDTH * OLED_SH1102_SCREEN_HEIGHT / 8));
+}
+void oled_display_from_buffer(void){
+	/*
+	oled_write_cmd_byte(COLUMNADDR);
+	oled_write_cmd_byte(0x00);
+	oled_write_cmd_byte(0x7F);
 
+	oled_write_cmd_byte(PAGEADDR);
+	oled_write_cmd_byte(0x00);
+	oled_write_cmd_byte(0x7);
+
+	oled_write_cmd_byte(SETSTARTLINE | 0x00);
+
+	for(uint16_t i=0; i< OLED_SH1102_BYTES; i+=16){
+
+		oled_write_data_bytes(&display_buffer[i], 16);
+	}*/
+	for(uint8_t i=0; i<=7; i++){
+
+		oled_write_cmd_byte(0xB0 + i);
+		oled_write_cmd_byte(0x02);   // column low addr
+		oled_write_cmd_byte(0x10);  // column high addr
+
+		oled_write_data_bytes(&display_buffer[i*128], 128);
+	}
+
+}
+void oled_reset_display(void){
+	oled_display_off();
+	oled_clear_buffer();
+	oled_display_from_buffer();
+	oled_display_on();
+}
+void oled_set_pixel(uint8_t x, uint8_t y){
+	if(x >= 0 && x < OLED_SH1102_SCREEN_WIDTH && y >=0 && y < OLED_SH1102_SCREEN_HEIGHT){
+		switch(oled_color){
+		case WHITE:   display_buffer[x + (y/8)*128] |= (1 << (y&7)); break;
+	    case BLACK:   display_buffer[x + (y/8)*128] &= ~(1 << (y&7)); break;
+	    case INVERSE: display_buffer[x + (y/8)*128] ^=  (1 << (y&7)); break;
+		}
+	}
+}
+void oled_set_char(uint8_t x, uint8_t y, unsigned char data){
+	for(int i =0; i< 8; i++){
+		if((data & (1<<i)) != 0 ){
+			oled_set_pixel(x, y + i);
+		}
+	}
+}
 

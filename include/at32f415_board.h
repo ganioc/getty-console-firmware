@@ -175,10 +175,64 @@ void i2c_write_cmd(uint8_t addr, uint8_t reg,uint8_t* tx_buf, uint8_t tx_len);
 #define OLED_SH1102_SCREEN_WIDTH   128
 #define OLED_SH1102_SCREEN_HEIGHT  64
 
+#define OLED_SH1102_BYTES  (OLED_SH1102_SCREEN_WIDTH * OLED_SH1102_SCREEN_HEIGHT / 8)
+
+#define BLACK 0
+#define WHITE 1
+#define INVERSE 2
+
+#define WIDTH_POS 0
+#define HEIGHT_POS 1
+#define FIRST_CHAR_POS 2
+#define CHAR_NUM_POS 3
+#define CHAR_WIDTH_START_POS 4
+
+#define TEXT_ALIGN_LEFT 0
+#define TEXT_ALIGN_CENTER 1
+#define TEXT_ALIGN_RIGHT 2
+
+#define CHARGEPUMP 0x8D
+#define COLUMNADDR 0x21
+#define COMSCANDEC 0xC8
+#define COMSCANINC 0xC0
+#define DISPLAYALLON 0xA5
+#define DISPLAYALLON_RESUME 0xA4
+#define DISPLAYOFF 0xAE
+#define DISPLAYON 0xAF
+#define EXTERNALVCC 0x1
+#define INVERTDISPLAY 0xA7
+#define MEMORYMODE 0x20
+#define NORMALDISPLAY 0xA6
+#define PAGEADDR 0x22
+#define PAGESTARTADDRESS 0xB0
+#define SEGREMAP 0xA1
+#define SETCOMPINS 0xDA
+#define SETCONTRAST 0x81
+#define SETDISPLAYCLOCKDIV 0xD5
+#define SETDISPLAYOFFSET 0xD3
+#define SETHIGHCOLUMN 0x10
+#define SETLOWCOLUMN 0x00
+#define SETMULTIPLEX 0xA8
+#define SETPRECHARGE 0xD9
+#define SETSEGMENTREMAP 0xA1
+#define SETSTARTLINE 0x40
+#define SETVCOMDETECT 0xDB
+#define SWITCHCAPVCC 0x2
+
+
 //void oled_write_cmd(uint8_t tx_buf, uint8_t tx_len);
 void oled_init();
 void oled_all_clear();
 void oled_all_on();
+void oled_display_off();
+
+void oled_reset_display(void);
+void oled_display_from_buffer(void);
+void oled_set_pixel(uint8_t x, uint8_t y);
+
+//struct oled_obj{
+//
+//};
 
 /**
   * @}
