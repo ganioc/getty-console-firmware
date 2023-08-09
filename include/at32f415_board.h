@@ -158,14 +158,24 @@ void uart2_tx_printf(char* format, ...);
 #define I2C1_SDA_GPIO_PORT               GPIOB
 #define I2C1_SDA_GPIO_CLK                CRM_GPIOB_PERIPH_CLOCK
 
-#define I2C1_SPEED                       400000
+#define I2C1_SPEED                       100000
 #define I2C1_OLED_ADDRESS                0x78
 
 #define I2C1_PORT                        I2C1
 #define I2C1_CLK                         CRM_I2C1_PERIPH_CLOCK
 
+#define I2C_TIMEOUT                      0xFFFFF
+
 void init_i2c_1();
-void i2c_write_oled_cmd();
+void i2c_write_cmd(uint8_t addr, uint8_t reg,uint8_t* tx_buf, uint8_t tx_len);
+
+/********** I2C OLED ***********/
+#define OLED_SH1102_WIDTH     132
+#define OLED_SH1102_HEIGHT    64
+//void oled_write_cmd(uint8_t tx_buf, uint8_t tx_len);
+void oled_init();
+void oled_clear();
+void oled_all_on();
 
 /**
   * @}

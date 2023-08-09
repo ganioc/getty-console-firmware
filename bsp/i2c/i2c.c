@@ -11,7 +11,8 @@
 
 #include <stdio.h>
 
-#define I2C_TIMEOUT                      0xFFFFF
+
+
 
 i2c_handle_type hi2cx;
 
@@ -103,20 +104,19 @@ void init_i2c_1(){
 	hi2cx.i2cx = I2C1_PORT;
 
 	i2c_config(&hi2cx);
-
 }
 
-void i2c_write_oled_cmd(){
+void i2c_write_cmd(uint8_t addr, uint8_t reg, uint8_t* tx_buf, uint8_t tx_len){
 	i2c_status_type i2c_status;
-	uint8_t tx_buf1[1] = { 0xAE };
+	//	uint8_t tx_buf1[1] = { 0xAE };
 
 
-	printf("write to oled\r\n");
-	delay_ms(100);
+	printf("write to oled %x\r\n", tx_buf[0]);
+	// delay_ms(10);
 
 	/* write data to memory device */
     if((i2c_status = i2c_memory_write(&hi2cx, I2C_MEM_ADDR_WIDIH_8,
-    		I2C1_OLED_ADDRESS, 0x0, tx_buf1, 1, I2C_TIMEOUT)) != I2C_OK)
+    		addr, reg, tx_buf, tx_len, I2C_TIMEOUT)) != I2C_OK)
     {
     	printf("write i2c eeprom failed. %d\r\n", i2c_status);
     }

@@ -116,6 +116,15 @@ int main(void)
 
 //  button_exint_init();
 
+  oled_init();
+
+
+  oled_clear();
+//
+  oled_all_on();
+
+  oled_clear();
+
   while(1)
   {
     at32_led_toggle(LED2);
@@ -138,7 +147,6 @@ int main(void)
 //	uart2_tx_send(tx_buf, strlen(tx_buf));
     uart2_tx_printf("begin...end\n");
 
-    i2c_write_oled_cmd();
   }
 }
 
