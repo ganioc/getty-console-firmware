@@ -158,7 +158,7 @@ void uart2_tx_printf(char* format, ...);
 #define I2C1_SDA_GPIO_PORT               GPIOB
 #define I2C1_SDA_GPIO_CLK                CRM_GPIOB_PERIPH_CLOCK
 
-#define I2C1_SPEED                       100000
+#define I2C1_SPEED                       400000
 #define I2C1_OLED_ADDRESS                0x78
 
 #define I2C1_PORT                        I2C1

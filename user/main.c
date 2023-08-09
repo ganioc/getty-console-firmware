@@ -123,7 +123,7 @@ int main(void)
 //
   oled_all_on();
 
-//  oled_all_clear();
+  oled_all_clear();
 //
 //  oled_all_on();
 
