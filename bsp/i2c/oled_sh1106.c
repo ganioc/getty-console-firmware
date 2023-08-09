@@ -8,8 +8,8 @@
 #include "at32f415_board.h"
 
 uint8_t buf[128] = {0};
-uint8_t buf_zero[OLED_SH1102_WIDTH] = {0};
-uint8_t buf_one[OLED_SH1102_WIDTH] = {0xFF};
+//uint8_t buf_zero[OLED_SH1102_WIDTH] = {0};
+//uint8_t buf_one[OLED_SH1102_WIDTH] = {0xFF};
 
 void oled_write_cmd(uint8_t reg, uint8_t* tx_buf, uint8_t tx_len){
 	i2c_write_cmd(I2C1_OLED_ADDRESS, reg, tx_buf,  tx_len);
@@ -68,7 +68,7 @@ void oled_init(){
 	// Turn ON
 	oled_write_cmd_byte(0xAF);
 }
-void oled_clear(){
+void oled_all_clear(){
 	for(int i = 0; i< OLED_SH1102_WIDTH; i++){
 		buf[i] = 0x00;
 	}
@@ -79,7 +79,12 @@ void oled_clear(){
 //		for(int j=0; j<2; j++){
 //			oled_write_data_bytes(buf_zero, 66);
 //		}
+//		for (int j = 0; j< 11; j++){
+//			// oled_write_data_bytes(buf, 132);
+//			oled_write_data_bytes(buf, 12);
+//		}
 		oled_write_data_bytes(buf, 132);
+
 	}
 }
 void oled_all_on(){
@@ -93,6 +98,12 @@ void oled_all_on(){
 //		for(int j=0; j<32; j++){
 //			oled_write_data_bytes(buf, 4);
 //		}
+//		for(int j = 0; j< 128; j++){
+//			// ;
+//			// oled_write_data_bytes(buf, 8);
+//			// oled_write_data_byte(0xFF);
+//		}
 		oled_write_data_bytes(buf, 128);
+
 	}
 }

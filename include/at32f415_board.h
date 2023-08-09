@@ -172,9 +172,12 @@ void i2c_write_cmd(uint8_t addr, uint8_t reg,uint8_t* tx_buf, uint8_t tx_len);
 /********** I2C OLED ***********/
 #define OLED_SH1102_WIDTH     132
 #define OLED_SH1102_HEIGHT    64
+#define OLED_SH1102_SCREEN_WIDTH   128
+#define OLED_SH1102_SCREEN_HEIGHT  64
+
 //void oled_write_cmd(uint8_t tx_buf, uint8_t tx_len);
 void oled_init();
-void oled_clear();
+void oled_all_clear();
 void oled_all_on();
 
 /**

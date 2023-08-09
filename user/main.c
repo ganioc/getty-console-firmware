@@ -119,11 +119,14 @@ int main(void)
   oled_init();
 
 
-  oled_clear();
+  oled_all_clear();
 //
   oled_all_on();
 
-  oled_clear();
+//  oled_all_clear();
+//
+//  oled_all_on();
+
 
   while(1)
   {
