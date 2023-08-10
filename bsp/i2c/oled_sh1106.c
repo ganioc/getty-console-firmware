@@ -201,6 +201,9 @@ uint8_t oled_utf8ascii(uint8_t ascii){
 	}
 	return 0; // otherwise return zero, if character has to be ignored
 }
+void oled_set_text_alignment(int textAlignment){
+	myTextAlignment = textAlignment;
+}
 int oled_get_string_width(uint8_t* buf, uint8_t len){
 	int stringWidth = 0;
 	uint8_t charCode;
@@ -272,5 +275,28 @@ void oled_draw_string(uint8_t x, uint8_t y, uint8_t* buf, uint8_t len){
 	}
 }
 
+void oled_draw_string_max_width(int x, int y, int maxLineWidth, uint8_t * buf, uint8_t len){
+	int currentLineWidth = 0;
+	int startsAt = 0;
+	int endsAt = 0;
+	int lineNumber = 0;
+	char currentChar = ' ';
+	int lineHeight = myFontData[HEIGHT_POS];
+	int lineCandidate = 0;
 
+	for(int i = 0; i < len; i++){
+		currentChar = buf[i];
+		if( currentChar == ' ' || currentChar == '-'){
+			lineCandidate = i;
+			if(oled_get_string_width(buf + startsAt, lineCandidate - startsAt) <= maxLineWidth){
+				endsAt = i;
+			}else{
+				oled_draw_string(x, y + lineNumber * lineHeight , buf + startsAt, endsAt - startsAt);
+				lineNumber++;
+				startsAt = endsAt + 1;
+			}
+		}
+	}
+	oled_draw_string(x, y + lineNumber * lineHeight, buf + startsAt, len - startsAt);
+}
 

@@ -38,6 +38,7 @@
 #define SLOW                             4
 
 uint8_t g_speed = FAST;
+const char *p_str = "Hello World! DrawString get String ";
 
 void button_exint_init(void);
 void button_isr(void);
@@ -141,8 +142,8 @@ int main(void)
 //	  oled_set_pixel(127, i);
 //  }
 
-  oled_draw_string(0,0,"Hello World!",12);
-
+  // oled_draw_string(0,0,"Hello World! DrawString get String",18);
+  oled_draw_string_max_width(0,0,128,(uint8_t *)p_str,strlen(p_str));
   oled_display_from_buffer();
 
 
