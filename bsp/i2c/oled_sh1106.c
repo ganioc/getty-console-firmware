@@ -19,7 +19,7 @@ uint8_t display_buffer[OLED_SH1102_SCREEN_WIDTH * OLED_SH1102_SCREEN_HEIGHT /8];
 
 uint8_t oled_color = WHITE;
 uint8_t lastChar;
-const char *myFontData = ArialMT_Plain_16;
+char *myFontData = (char *)ArialMT_Plain_16;
 int myTextAlignment = TEXT_ALIGN_LEFT;
 
 
@@ -203,6 +203,20 @@ uint8_t oled_utf8ascii(uint8_t ascii){
 }
 void oled_set_text_alignment(int textAlignment){
 	myTextAlignment = textAlignment;
+}
+void oled_set_font(int num){
+	switch(num){
+	case 10:
+		myFontData = (char *)ArialMT_Plain_10;
+		break;
+	case 16:
+		myFontData = (char *)ArialMT_Plain_16;
+		break;
+	case 24:
+		myFontData = (char *)ArialMT_Plain_24;
+		break;
+	}
+
 }
 int oled_get_string_width(uint8_t* buf, uint8_t len){
 	int stringWidth = 0;

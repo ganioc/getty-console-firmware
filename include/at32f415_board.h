@@ -231,7 +231,7 @@ void oled_display_from_buffer(void);
 void oled_set_pixel(uint8_t x, uint8_t y);
 void oled_draw_string(uint8_t x, uint8_t y, uint8_t* buf, uint8_t len);
 void oled_draw_string_max_width(int x, int y, int maxLineWidth, uint8_t * buf, uint8_t len);
-
+void oled_set_font(int num);
 
 //struct oled_obj{
 //

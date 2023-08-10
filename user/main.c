@@ -33,12 +33,13 @@
   * @{
   */
 
+
 #define DELAY                            500
 #define FAST                             1
 #define SLOW                             4
 
 uint8_t g_speed = FAST;
-const char *p_str = "Hello World! DrawString get String ";
+const char *p_str = "Get IP Address: 192.168.0.99 ";
 
 void button_exint_init(void);
 void button_isr(void);
@@ -143,6 +144,7 @@ int main(void)
 //  }
 
   // oled_draw_string(0,0,"Hello World! DrawString get String",18);
+  oled_set_font(10);
   oled_draw_string_max_width(0,0,128,(uint8_t *)p_str,strlen(p_str));
   oled_display_from_buffer();
 
