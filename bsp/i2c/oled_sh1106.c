@@ -4,9 +4,12 @@
  *  Created on: 2023 Aug 8
  *      Author: ruff
  */
+#include <string.h>
 
 #include "at32f415_board.h"
-#include <string.h>
+#include "SH1106Fonts.h"
+
+
 
 uint8_t buf[128] = {0};
 
@@ -15,6 +18,10 @@ uint8_t display_buffer[OLED_SH1102_SCREEN_WIDTH * OLED_SH1102_SCREEN_HEIGHT /8];
 //uint8_t buf_one[OLED_SH1102_WIDTH] = {0xFF};
 
 uint8_t oled_color = WHITE;
+uint8_t lastChar;
+const char *myFontData = ArialMT_Plain_16;
+int myTextAlignment = TEXT_ALIGN_LEFT;
+
 
 void oled_write_cmd(uint8_t reg, uint8_t* tx_buf, uint8_t tx_len){
 	i2c_write_cmd(I2C1_OLED_ADDRESS, reg, tx_buf,  tx_len);
@@ -170,4 +177,100 @@ void oled_set_char(uint8_t x, uint8_t y, unsigned char data){
 		}
 	}
 }
+uint8_t oled_utf8ascii(uint8_t ascii){
+	if(ascii < 128){
+		lastChar = 0;
+		return (ascii);
+	}
+
+	// get previous input
+	uint8_t last = lastChar; // get last char
+	lastChar = ascii;        // remember actual character
+
+	switch(last){ // conversion depending on first UTF8-character
+	case 0xC2:
+		return (ascii);
+		break;
+	case 0xC3:
+		return (ascii | 0xC0);
+		break;
+	case 0x82:
+		if(ascii == 0xAC){
+			return (0x80); // special case Euro-symbol
+		}
+	}
+	return 0; // otherwise return zero, if character has to be ignored
+}
+int oled_get_string_width(uint8_t* buf, uint8_t len){
+	int stringWidth = 0;
+	uint8_t charCode;
+	for(int j = 0; j< len; j++){
+		charCode = buf[j] - 0x20;
+		stringWidth += myFontData[CHAR_WIDTH_START_POS + charCode];
+	}
+	return stringWidth;
+}
+void oled_draw_string(uint8_t x, uint8_t y, uint8_t* buf, uint8_t len){
+	unsigned char currentByte;
+	int charX, charY;
+	int currentBitCount;
+	int charCode;
+	int currentCharWidth;
+	int currentCharStartPos;
+	int cursorX = 0;
+
+
+	int numberOfChars = myFontData[CHAR_NUM_POS];
+	// iterate over string
+	int firstChar = myFontData[FIRST_CHAR_POS];
+	int charHeight = myFontData[HEIGHT_POS];
+	int charWidth = myFontData[WIDTH_POS];
+	int currentCharByteNum = 0;
+	int startX = 0;
+	int startY = y;
+
+	int width = 0;
+
+	if(myTextAlignment == TEXT_ALIGN_LEFT){
+		startX = x;
+	}else if(myTextAlignment == TEXT_ALIGN_CENTER){
+		width = oled_get_string_width(buf, len);
+		startX = x - width/2;
+	}else if(myTextAlignment == TEXT_ALIGN_RIGHT){
+		width = oled_get_string_width(buf, len);
+		startX = x - width;
+	}
+
+	for(int j = 0; j < len; j++){
+		charCode = buf[j] - 0x20; // 0x20 1st character, SP,
+		currentCharWidth = myFontData[CHAR_WIDTH_START_POS + charCode];
+		// Jump to font data beginning
+		currentCharStartPos = CHAR_WIDTH_START_POS + numberOfChars;
+
+		for(int m = 0; m < charCode; m++){
+			currentCharStartPos += myFontData[CHAR_WIDTH_START_POS + m ] * charHeight /8 + 1;
+		}
+		currentCharByteNum = ((charHeight * currentCharWidth) / 8) + 1;
+		// iterate over all bytes of character
+		for(int i = 0; i < currentCharByteNum; i++){
+			currentByte = myFontData[currentCharStartPos + i];
+
+			// iterate over all bytes of character
+			for(int bit = 0; bit < 8; bit++){
+				currentBitCount = i * 8 + bit;
+
+				charX = currentBitCount % currentCharWidth;
+				charY = currentBitCount / currentCharWidth;
+
+				if( (currentByte & (1 << bit)) != 0){
+					oled_set_pixel(startX + cursorX + charX, startY + charY);
+				}
+			}
+		}
+		cursorX += currentCharWidth;
+
+	}
+}
+
+
 
