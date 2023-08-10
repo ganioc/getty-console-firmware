@@ -111,7 +111,7 @@ void i2c_write_cmd(uint8_t addr, uint8_t reg, uint8_t* tx_buf, uint8_t tx_len){
 	//	uint8_t tx_buf1[1] = { 0xAE };
 
 
-	printf("write to oled %x\r\n", tx_buf[0]);
+	// printf("write to oled %x\r\n", tx_buf[0]);
 	// delay_ms(10);
 
 	/* write data to memory device */

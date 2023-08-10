@@ -164,12 +164,22 @@ int main(void)
     	}
 
     	uart2_clear_rx_flag();
-    	printf("rx sth.\r\n");
+    	// printf("rx sth.\r\n");
+
+    	uart2_tx_printf("%s\n", "pi");
+
+    	if(uart2_get_rx_flag() == 1){
+
+        	for(int i =0; i< uart2_get_rx_len(); i++){
+        		printf("%c", buf[i]);
+        	}
+        	uart2_clear_rx_flag();
+    	}
 
     }
 //	sprintf(tx_buf, "%s","higogo");
 //	uart2_tx_send(tx_buf, strlen(tx_buf));
-    uart2_tx_printf("begin...end\n");
+    // uart2_tx_printf("begin...end\n");
 
   }
 }

@@ -215,6 +215,9 @@ void oled_set_font(int num){
 	case 24:
 		myFontData = (char *)ArialMT_Plain_24;
 		break;
+	default:
+		printf("Wrong font num!\n");
+		break;
 	}
 
 }
