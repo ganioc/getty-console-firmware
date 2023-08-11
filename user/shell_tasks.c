@@ -10,8 +10,8 @@
 struct SHELL_TASK tasks[] = {
 		{
 				name: "ipconfig",
-				send_script: send_ipconfig,
-				parse_feedback: parse_ipconfig
+				send_script: send_ifconfig,
+				parse_feedback: parse_ifconfig
 		}
 };
 

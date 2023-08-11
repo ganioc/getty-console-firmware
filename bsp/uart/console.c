@@ -15,6 +15,10 @@ uint8_t userpasswd[64];
 
 char console_tx_buffer[256];
 
+const char* ifconfig = "ifconfig | grep \"inet \" | awk -F\' \' \'{print $2}\' | grep -v \"172\" | grep -v \"127\"";
+
+// const char* ifconfig = "ifconfig";
+
 void console_init(){
 	sprintf(username, "%s","ruff");
 	sprintf(userpasswd, "%s", "nanchao.org");
@@ -51,6 +55,12 @@ void send_to_console_passwd(){
 	sprintf( console_tx_buffer, "%s\r\n", userpasswd);
 	send_to_console(console_tx_buffer, strlen(console_tx_buffer));
 }
+void send_ifconfig(void){
+	printf("send ipconfig\r\n");
+	sprintf( console_tx_buffer, "%s\r\n", ifconfig);
+	send_to_console(console_tx_buffer, strlen(console_tx_buffer));
+}
+
 void print_rx_buffer(){
 	for(int i = 0; i < console_rx_len; i++){
 		char ch = console_rx_buffer[i];
@@ -108,9 +118,16 @@ int check_cmdline_prompt(){
 	return 0;
 }
 
-void send_ipconfig(void){
-	printf("send ipconfig\r\n");
-}
-void parse_ipconfig(void){
-	printf("parse ipconfig\r\n");
+
+void parse_ifconfig(void){
+	printf("parse ifconfig\r\n");
+	if(read_from_console() == CONSOLE_RX_TIMEOUT){
+		  oled_display_task_timeout();
+		  printf("Err: wait task fb timeout\r\n");
+
+	}else{
+		printf("ifconfig feedback:\r\n");
+		print_rx_buffer();
+	}
+
 }

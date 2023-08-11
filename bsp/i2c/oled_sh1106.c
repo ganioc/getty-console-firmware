@@ -35,6 +35,7 @@ const char *p_passwd_timeout = "Err: passwd timeout ";
 const char *p_passwd_wrong = "Err: passwd wrong ";
 const char *p_cmdline = "Login succeed! ";
 const char *p_tasks = "Running tasks ";
+const char *p_task_timeout= "Shell timeout ";
 
 void oled_write_cmd(uint8_t reg, uint8_t* tx_buf, uint8_t tx_len){
 	i2c_write_cmd(I2C1_OLED_ADDRESS, reg, tx_buf,  tx_len);
@@ -92,6 +93,11 @@ void oled_init(){
 
 	// Turn ON
 	oled_write_cmd_byte(0xAF);
+
+	oled_all_clear();
+
+	oled_reset_display();
+	oled_set_font(16);
 }
 
 void oled_all_clear(){
@@ -382,4 +388,7 @@ void oled_display_cmdline(){
 }
 void oled_display_tasks(){
 	oled_display_string((uint8_t*)p_tasks);
+}
+void oled_display_task_timeout(){
+	oled_display_string((uint8_t*)p_task_timeout);
 }

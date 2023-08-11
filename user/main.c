@@ -118,9 +118,6 @@ int main(void)
 
 
   oled_init();
-  oled_all_clear();
-
-  oled_reset_display();
 
 
 //
@@ -146,7 +143,7 @@ int main(void)
 
   console_init();
 
-  oled_set_font(16);
+
 
   oled_display_welcome();
   delay_sec(3);

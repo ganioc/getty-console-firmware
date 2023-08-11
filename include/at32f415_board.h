@@ -246,6 +246,7 @@ void oled_display_passwd_timeout();
 void oled_display_cmdline_wrong();
 void oled_display_cmdline();
 void oled_display_tasks();
+void oled_display_task_timeout();
 
 /************* console **************/
 // in ms
@@ -276,8 +277,8 @@ struct SHELL_TASK{
 };
 
 void loop_tasks();
-void send_ipconfig(void);
-void parse_ipconfig(void);
+void send_ifconfig(void);
+void parse_ifconfig(void);
 
 //struct oled_obj{
 //
