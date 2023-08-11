@@ -25,7 +25,16 @@ int myTextAlignment = TEXT_ALIGN_LEFT;
 const char *p_str = "Get IP Address: 192.168.0.99 ";
 const char *p_welcome = "Getty Console v1.0 ";
 const char *p_login_timeout = "Err: login timeout ";
-const char *p_login = "Login ... ";
+const char *p_login = "Login ... " ;
+const char *p_login_wrong = "Err: login wrong ";
+const char *p_username = "User name ";
+const char *p_username_timeout = "Err: username timeout ";
+const char *p_username_wrong = "Err: username wrong ";
+const char *p_passwd = "Passwd ";
+const char *p_passwd_timeout = "Err: passwd timeout ";
+const char *p_passwd_wrong = "Err: passwd wrong ";
+const char *p_cmdline = "Login succeed! ";
+const char *p_tasks = "Running tasks ";
 
 void oled_write_cmd(uint8_t reg, uint8_t* tx_buf, uint8_t tx_len){
 	i2c_write_cmd(I2C1_OLED_ADDRESS, reg, tx_buf,  tx_len);
@@ -340,4 +349,37 @@ void oled_display_login_timeout(){
 	oled_buffer_clear();
 	oled_draw_string_max_width(0,0,128,(uint8_t *)p_login_timeout,strlen(p_login_timeout));
 	oled_display_from_buffer();
+}
+
+void oled_display_string(uint8_t* buf){
+	oled_buffer_clear();
+	oled_draw_string_max_width(0,0,128,buf,strlen(buf));
+	oled_display_from_buffer();
+}
+void oled_display_login_wrong(){
+	oled_display_string((uint8_t*)p_login_wrong);
+}
+void oled_display_username(){
+	oled_display_string((uint8_t*)p_username);
+}
+void oled_display_username_timeout(){
+	oled_display_string((uint8_t*)p_username_timeout);
+}
+void oled_display_username_wrong(){
+	oled_display_string((uint8_t*)p_username_wrong);
+}
+void oled_display_passwd(){
+	oled_display_string((uint8_t*)p_passwd);
+}
+void oled_display_passwd_timeout(){
+	oled_display_string((uint8_t*)p_passwd_timeout);
+}
+void  oled_display_cmdline_wrong(){
+	oled_display_string((uint8_t*)p_passwd_wrong);
+}
+void oled_display_cmdline(){
+	oled_display_string((uint8_t*)p_cmdline);
+}
+void oled_display_tasks(){
+	oled_display_string((uint8_t*)p_tasks);
 }

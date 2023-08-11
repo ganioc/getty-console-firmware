@@ -236,7 +236,16 @@ void oled_set_font(int num);
 void oled_display_welcome();
 void oled_display_login();
 void oled_display_login_timeout();
+void oled_display_login_wrong();
 
+void oled_display_username();
+void oled_display_username_timeout();
+void oled_display_username_wrong();
+void oled_display_passwd();
+void oled_display_passwd_timeout();
+void oled_display_cmdline_wrong();
+void oled_display_cmdline();
+void oled_display_tasks();
 
 /************* console **************/
 // in ms
@@ -250,6 +259,25 @@ int read_from_console(void);
 //void send_to_console(char* buf, int len);
 void send_to_console_0D0A();
 int check_login_prompt();
+void send_to_console_username();
+int check_passwd_prompt();
+void send_to_console_passwd();
+int check_cmdline_prompt();
+
+/************ tasks ******************/
+#define SHELL_TASKS_NUM   1
+
+typedef void (*task_callback)(void);
+
+struct SHELL_TASK{
+	char *name;
+	task_callback send_script;
+	task_callback parse_feedback;
+};
+
+void loop_tasks();
+void send_ipconfig(void);
+void parse_ipconfig(void);
 
 //struct oled_obj{
 //
