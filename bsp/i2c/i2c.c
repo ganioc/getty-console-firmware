@@ -27,7 +27,7 @@ void i2c_lowlevel_init(i2c_handle_type* hi2c)
 
   if(hi2c->i2cx == I2C1_PORT)
   {
-	printf("init i2c1\r\n");
+	// printf("init i2c1\r\n");
 
     /* i2c periph clock enable */
     crm_periph_clock_enable(I2C1_CLK, TRUE);

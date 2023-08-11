@@ -11,16 +11,20 @@
 #include <stdarg.h>
 #include <string.h>
 
+extern uint8_t console_rx_buffer[];
+extern uint16_t console_rx_len;
+
 uint8_t uart2_rx_buffer[UART2_BUFFER_LEN];
-uint8_t uart2_rx_tail = 0;
-uint8_t uart2_rx_head = 0;
+uint16_t uart2_rx_tail = 0;
+uint16_t uart2_rx_head = 0;
 
 uint8_t uart2_tx_buffer[UART2_BUFFER_LEN];
-uint8_t uart2_tx_tail = 0;
-uint8_t uart2_tx_head = 0;
+uint16_t uart2_tx_tail = 0;
+uint16_t uart2_tx_head = 0;
 
 uint8_t uart2_rx_flag = 0; // 1 received packet ,
 uint8_t uart2_tx_flag = 0; // 1 tx packet succeed ,
+uint8_t uart2_irq_idle_enabled = 0;
 
 
 void uart2_init(uint32_t baudrate){
@@ -71,18 +75,31 @@ void USART2_IRQHandler(void)
   {
     if(usart_flag_get(D2_UART, USART_RDBF_FLAG) != RESET)
     {
+      if(uart2_rx_head >= UART2_BUFFER_LEN){
+    	  usart_data_receive(D2_UART);
+      }
       /* read one byte from the receive data register */
-      uart2_rx_buffer[uart2_rx_head++] = usart_data_receive(D2_UART);
-
-      usart_interrupt_enable(D2_UART, USART_IDLE_INT, TRUE);
+      else{
+    	  uart2_rx_buffer[uart2_rx_head++] = usart_data_receive(D2_UART);
+          if(uart2_irq_idle_enabled == 0){
+        	  usart_interrupt_enable(D2_UART, USART_IDLE_INT, TRUE);
+        	  uart2_irq_idle_enabled = 1;
+          }
+      }
 
     }
     if(usart_flag_get(D2_UART, USART_IDLEF_FLAG) != RESET){
-  	  // read from the rx buffer,
+    	// read from the rx buffer,
+    	// copy to console layer data buffer,
+    	for(int i = 0; i< uart2_rx_head; i++){
+    		console_rx_buffer[i] = uart2_rx_buffer[i];
+    	}
+    	console_rx_len = uart2_rx_head;
 
-
+    	uart2_rx_head = 0;
     	uart2_rx_flag = 1;
 
+    	uart2_irq_idle_enabled = 0;
     	usart_interrupt_enable(D2_UART, USART_IDLE_INT, FALSE);
     }
   }
@@ -113,7 +130,7 @@ void USART2_IRQHandler(void)
 uint8_t uart2_get_rx_flag(){
 	return uart2_rx_flag;
 }
-void uart2_clear_rx_flag(){
+void uart2_reset_rx_flag(){
 	uart2_rx_flag = 0;
 	uart2_rx_head = 0;
 }
@@ -162,4 +179,9 @@ void uart2_tx_printf(char* format, ...){
 
 	va_end(args_list);
 }
-
+//uint8_t uart2_get_rx_flag(){
+//	return uart2_rx_flag;
+//}
+//void uart2_reset_rx_flag(){
+//	uart2_rx_flag = 0;
+//}

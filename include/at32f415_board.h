@@ -137,14 +137,14 @@ void uart_print_init(uint32_t baudrate);
 #define D2_UART_TX_GPIO_CRM_CLK       CRM_GPIOA_PERIPH_CLOCK
 #define D2_UART_IRQn                  USART2_IRQn
 
-#define UART2_BUFFER_LEN              64
+#define UART2_BUFFER_LEN              4*1024
 
 void uart2_init(uint32_t baudrate);
 uint8_t uart2_get_rx_flag();
-void uart2_clear_rx_flag();
+void uart2_reset_rx_flag();
 uint8_t uart2_get_rx_len();
 uint8_t * uart2_get_rx_buf();
-//void uart2_tx_send(uint8_t*buf, uint16_t len);
+void uart2_tx_send(uint8_t*buf, uint16_t len);
 uint8_t uart2_get_tx_flag();
 void uart2_tx_printf(char* format, ...);
 
@@ -232,6 +232,24 @@ void oled_set_pixel(uint8_t x, uint8_t y);
 void oled_draw_string(uint8_t x, uint8_t y, uint8_t* buf, uint8_t len);
 void oled_draw_string_max_width(int x, int y, int maxLineWidth, uint8_t * buf, uint8_t len);
 void oled_set_font(int num);
+
+void oled_display_welcome();
+void oled_display_login();
+void oled_display_login_timeout();
+
+
+/************* console **************/
+// in ms
+#define CONSOLE_WAIT_INTERVAL   250
+#define CONSOLE_WAIT_TIMES      8
+#define CONSOLE_RX_OK           0
+#define CONSOLE_RX_TIMEOUT      -1
+
+void console_init();
+int read_from_console(void);
+//void send_to_console(char* buf, int len);
+void send_to_console_0D0A();
+int check_login_prompt();
 
 //struct oled_obj{
 //

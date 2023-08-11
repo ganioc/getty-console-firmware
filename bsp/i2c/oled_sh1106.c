@@ -22,6 +22,10 @@ uint8_t lastChar;
 char *myFontData = (char *)ArialMT_Plain_16;
 int myTextAlignment = TEXT_ALIGN_LEFT;
 
+const char *p_str = "Get IP Address: 192.168.0.99 ";
+const char *p_welcome = "Getty Console v1.0 ";
+const char *p_login_timeout = "Err: login timeout ";
+const char *p_login = "Login ... ";
 
 void oled_write_cmd(uint8_t reg, uint8_t* tx_buf, uint8_t tx_len){
 	i2c_write_cmd(I2C1_OLED_ADDRESS, reg, tx_buf,  tx_len);
@@ -316,4 +320,24 @@ void oled_draw_string_max_width(int x, int y, int maxLineWidth, uint8_t * buf, u
 	}
 	oled_draw_string(x, y + lineNumber * lineHeight, buf + startsAt, len - startsAt);
 }
+void oled_buffer_clear(void){
+	for(int i = 0; i< OLED_SH1102_SCREEN_WIDTH * OLED_SH1102_SCREEN_HEIGHT /8; i++){
+		display_buffer[i] = 0x0;
+	}
+}
 
+void oled_display_welcome(){
+	oled_buffer_clear();
+	oled_draw_string_max_width(0,0,128,(uint8_t *)p_welcome,strlen(p_welcome));
+	oled_display_from_buffer();
+}
+void oled_display_login(){
+	oled_buffer_clear();
+	oled_draw_string_max_width(0,0,128,(uint8_t *)p_login,strlen(p_login));
+	oled_display_from_buffer();
+}
+void oled_display_login_timeout(){
+	oled_buffer_clear();
+	oled_draw_string_max_width(0,0,128,(uint8_t *)p_login_timeout,strlen(p_login_timeout));
+	oled_display_from_buffer();
+}
