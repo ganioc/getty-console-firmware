@@ -81,6 +81,8 @@ void USART2_IRQHandler(void)
       /* read one byte from the receive data register */
       else{
     	  uart2_rx_buffer[uart2_rx_head++] = usart_data_receive(D2_UART);
+
+
           if(uart2_irq_idle_enabled == 0){
         	  usart_interrupt_enable(D2_UART, USART_IDLE_INT, TRUE);
         	  uart2_irq_idle_enabled = 1;
