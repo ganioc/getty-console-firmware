@@ -25,7 +25,7 @@ void loop_tasks(){
 
 		tasks[i].parse_feedback();
 
-		delay_sec(5);
+		delay_sec(TASKS_DELAY_SEC);
 
 		i++;
 

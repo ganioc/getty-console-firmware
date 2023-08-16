@@ -268,7 +268,8 @@ void send_to_console_passwd();
 int check_cmdline_prompt();
 
 /************ tasks ******************/
-#define SHELL_TASKS_NUM   1
+#define SHELL_TASKS_NUM        1
+#define TASKS_DELAY_SEC        10
 
 typedef void (*task_callback)(void);
 
