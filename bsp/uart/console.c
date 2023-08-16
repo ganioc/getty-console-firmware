@@ -17,7 +17,9 @@ char console_tx_buffer[256];
 char cmdline_rx_buffer[256];
 uint16_t cmdline_rx_len=0;
 
-const char* ifconfig = "ifconfig | grep \"inet \" | awk -F\' \' \'{print $2}\' | grep -v \"172\" | grep -v \"127\" | xargs -n2 -d\'\n\'";
+const char* ifconfig = "ifconfig | grep \"inet \" | awk -F\' \' \'{print $2}\' | grep -v \"172\" | grep -v \"127\" | xargs -n 1 -d\'\n\'";
+//const char* ifconfig = "ifconfig | grep \"inet \" | awk -F\' \' \'{print $2}\' | grep -v \"172\" | grep -v \"127\" | xargs -n 1 ";
+
 uint8_t   data_buffer[256];
 uint16_t  data_buffer_index = 0;
 
@@ -204,6 +206,7 @@ void remove_invisible_character(uint8_t* buf, uint16_t *len){
 			buf[last_index++] = buf[i];
 		}
 	}
+	buf[last_index] = 0x0;
 	*len = last_index;
 }
 /*
@@ -213,6 +216,7 @@ void remove_invisible_character(uint8_t* buf, uint16_t *len){
  * state 3:
  * state 4:
  */
+/*
 int parse_ifconfig_valid_data(){
 	int state = 0;
 	uint8_t ch, ch_next;
@@ -255,6 +259,77 @@ int parse_ifconfig_valid_data(){
 ifconfig_parse_fail:
 	return -1;
 }
+
+*/
+int is_num(char ch){
+	if( ch >= '0' && ch <= '9' ){
+		return 0;
+	}else{
+		return -1;
+	}
+}
+int is_num_or_dot(char ch){
+	if(ch == '.' || ( ch >= '0' && ch <= '9')){
+		return 0;
+	}else{
+		return -1;
+	}
+}
+void parse_ifconfig_valid_ip(char* buffer, uint16_t* plen){
+	if( is_num(buffer[0]) == 0 &&
+			is_num(buffer[1]) == 0 &&
+			is_num_or_dot(buffer[2]) == 0 &&
+			is_num_or_dot(buffer[3]) == 0){
+		printf("print ip %d\r\n", *plen);
+		// remove unprintable character,
+		remove_invisible_character(buffer, plen);
+
+		oled_display_string(buffer);
+
+		delay_ms(2000);
+	}
+}
+
+/**
+ *  \r\n found,
+ */
+int parse_ifconfig_valid_data(char* buffer, uint16_t len){
+	data_buffer_index = 0;
+	for(int i = 0; i < len; i++){
+		// last line, command line,
+
+		data_buffer[data_buffer_index++] = buffer[i];
+		if( i == len-2 ){
+			printf("last line\r\n");
+			data_buffer[data_buffer_index++] = buffer[i+1];
+			data_buffer[data_buffer_index] = 0x0;
+			printf("%s\r\n", data_buffer);
+			break;
+		}
+		// found the line end mark character
+		if(buffer[i] == 0x0D || buffer[i] == 0x0A){
+//			data_buffer[data_buffer_index] = 0x0;
+//			printf("%s\n", data_buffer);
+			// if it is the IP address print it out
+//			data_buffer_index = 0;
+			data_buffer[data_buffer_index] = 0x0;
+			data_buffer_index--;
+
+			printf("Got a line =>\r\n");
+			printf("==%s==\r\n", data_buffer);
+			// print ip out
+			parse_ifconfig_valid_ip(data_buffer, &data_buffer_index);
+
+			i++;
+			while( buffer[i] == 0x0D || buffer[i] == 0x0A ){
+				i++;
+			}
+			i--;
+			data_buffer_index = 0;
+		}
+	}
+
+}
 void parse_ifconfig(void){
 	int i = 0;
 
@@ -273,7 +348,7 @@ void parse_ifconfig(void){
 			printf("after remove invisible character\r\n");
 			print_buffer(cmdline_rx_buffer, cmdline_rx_len);
 
-			// parse_ifconfig_valid_data();
+			parse_ifconfig_valid_data(cmdline_rx_buffer, cmdline_rx_len);
 		}else{
 			printf("Err: parse cmdline info failed\r\n");
 		}

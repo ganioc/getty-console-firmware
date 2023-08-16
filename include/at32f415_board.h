@@ -248,6 +248,8 @@ void oled_display_cmdline();
 void oled_display_tasks();
 void oled_display_task_timeout();
 
+void oled_display_string(uint8_t* buf);
+
 /************* console **************/
 // in ms
 #define CONSOLE_WAIT_INTERVAL   250
