@@ -287,7 +287,7 @@ void parse_ifconfig(void);
 void usb_clock48m_select(usb_clk48_s clk_s);
 void usb_gpio_config(void);
 void usb_low_power_wakeup_config(void);
-
+void usb_init(void);
 //struct oled_obj{
 //
 //};

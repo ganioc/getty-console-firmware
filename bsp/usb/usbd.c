@@ -148,3 +148,7 @@ void usb_clock48m_select(usb_clk48_s clk_s) {
 	}
 }
 
+void usb_init(void){
+
+}
+

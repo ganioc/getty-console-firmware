@@ -119,6 +119,8 @@ int main(void)
 
   oled_init();
 
+  usb_init();
+
 
 //
 //  oled_all_on();
