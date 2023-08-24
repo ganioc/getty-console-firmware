@@ -21,9 +21,9 @@
   *
   **************************************************************************
   */
+#include <usb_class/cdc_class.h>
+#include <usb_class/cdc_desc.h>
 #include "usbd_core.h"
-#include "cdc_class.h"
-#include "cdc_desc.h"
 
 /** @addtogroup AT32F415_middlewares_usbd_class
   * @{

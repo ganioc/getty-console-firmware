@@ -292,6 +292,13 @@ void usb_init(void);
 //
 //};
 
+
+/************** version ******************/
+/******* version ********/
+#define VERSION_STR      "1.0.2 "
+char *get_version();
+
+
 /**
   * @}
   */

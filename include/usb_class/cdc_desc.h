@@ -30,7 +30,7 @@
 extern "C" {
 #endif
 
-#include "cdc_class.h"
+#include <usb_class/cdc_class.h>
 #include "usbd_core.h"
 
 /** @addtogroup AT32F415_middlewares_usbd_class

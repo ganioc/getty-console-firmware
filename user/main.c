@@ -114,40 +114,25 @@ int main(void)
 
   at32_board_init();
 
-  printf("\r\nhello console\r\n");
+  printf("\r\nHello console %s\r\n", get_version());
 
 
   oled_init();
 
   usb_init();
 
-
-//
-//  oled_all_on();
-//
-//  oled_all_clear();
-//
-//  oled_all_on();
-
-//  for(int i=0; i< 10; i++){
-//	  oled_set_pixel(2,32+i);
-//  }
-//  for(int i=0; i< 128; i++){
-//	  oled_set_pixel(i,0);
-//	  oled_set_pixel(i,63);
-//  }
-//  for(int i=0; i< 64; i++){
-//	  oled_set_pixel(0,i);
-//	  oled_set_pixel(127, i);
-//  }
-
-  // oled_draw_string(0,0,"Hello World! DrawString get String",18);
-
   console_init();
 
-
-
   oled_display_welcome();
+
+  printf("\r\nBefore loop\r\n");
+
+  while(1){
+	  delay_sec(3);
+	  printf("run\r\n");
+  }
+
+/*
   delay_sec(3);
 
   // send_to_console_0D0A();
@@ -230,6 +215,8 @@ end:
 	  at32_led_toggle(LED2);
 	  delay_ms(g_speed * DELAY);
   }
+
+  */
 
 //  while(1)
 //  {

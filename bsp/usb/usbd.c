@@ -5,12 +5,12 @@
  *      Author: ruff
  */
 
+#include <usb_class/cdc_class.h>
+#include <usb_class/cdc_desc.h>
 #include "at32f415_board.h"
 #include "usb_conf.h"
 #include "usb_core.h"
 #include "usbd_int.h"
-#include "cdc_class.h"
-#include "cdc_desc.h"
 
 /** @addtogroup 415_USB_device_vcp_loopback USB_device_vcp_loopback
  * @{
@@ -104,12 +104,13 @@ void usb_gpio_config(void) {
 #endif
 
 	/* otgfs use vbus pin */
-#ifndef USB_VBUS_IGNORE
+#ifdef USB_VBUS_IGNORE
 	gpio_init_struct.gpio_pins = OTG_PIN_VBUS;
 	gpio_init_struct.gpio_pull = GPIO_PULL_DOWN;
 	gpio_init_struct.gpio_mode = GPIO_MODE_INPUT;
 	gpio_init(OTG_PIN_GPIO, &gpio_init_struct);
 #endif
+
 }
 /**
  * @brief  usb 48M clock select
@@ -148,7 +149,28 @@ void usb_clock48m_select(usb_clk48_s clk_s) {
 	}
 }
 
-void usb_init(void){
 
+void usb_init(void) {
+	usb_gpio_config();
+
+#ifdef USB_LOW_POWER_WAKUP
+	usb_low_power_wakeup_config();
+#endif
+
+	/* enable otgfs clock */
+	crm_periph_clock_enable(OTG_CLOCK, TRUE);
+
+	/* select usb 48m clcok source */
+	usb_clock48m_select(USB_CLK_HEXT);
+
+	/* enable otgfs irq */
+	nvic_irq_enable(OTG_IRQ, 0, 0);
+
+	/* init usb */
+	usbd_init(&otg_core_struct,
+			USB_FULL_SPEED_CORE_ID,
+			USB_ID,
+			&cdc_class_handler,
+			&cdc_desc_handler);
 }
 

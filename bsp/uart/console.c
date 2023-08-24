@@ -23,6 +23,10 @@ const char* ifconfig = "ifconfig | grep \"inet \" | awk -F\' \' \'{print $2}\' |
 uint8_t   data_buffer[256];
 uint16_t  data_buffer_index = 0;
 
+/**
+ * get some parameters
+ *
+ */
 void console_init(){
 	sprintf(username, "%s","ruff");
 	sprintf(userpasswd, "%s", "nanchao.org");

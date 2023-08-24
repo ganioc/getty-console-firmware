@@ -42,6 +42,8 @@ gpio_type *led_gpio_port[LED_NUM]        = {LED2_GPIO, LED3_GPIO, LED4_GPIO};
 uint16_t led_gpio_pin[LED_NUM]           = {LED2_PIN, LED3_PIN, LED4_PIN};
 crm_periph_clock_type led_gpio_crm_clk[LED_NUM] = {LED2_GPIO_CRM_CLK, LED3_GPIO_CRM_CLK, LED4_GPIO_CRM_CLK};
 
+
+
 /* delay variable */
 static __IO uint32_t fac_us;
 static __IO uint32_t fac_ms;
@@ -385,6 +387,10 @@ void delay_sec(uint16_t sec)
   }
 }
 
+
+char *get_version(){
+	return VERSION_STR;
+}
 /**
   * @}
   */

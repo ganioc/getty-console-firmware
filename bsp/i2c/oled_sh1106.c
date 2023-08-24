@@ -23,7 +23,9 @@ char *myFontData = (char *)ArialMT_Plain_16;
 int myTextAlignment = TEXT_ALIGN_LEFT;
 
 const char *p_str = "Get IP Address: 192.168.0.99 ";
-const char *p_welcome = "Getty Console v1.0 ";
+
+#define p_welcome "Getty Console " VERSION_STR
+
 const char *p_login_timeout = "Err: login timeout ";
 const char *p_login = "Login ... " ;
 const char *p_login_wrong = "Err: login wrong ";
