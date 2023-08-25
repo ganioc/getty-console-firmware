@@ -5,8 +5,8 @@
  *      Author: ruff
  */
 
-#include <usb_class/cdc_class.h>
-#include <usb_class/cdc_desc.h>
+//#include <usb_class/cdc_class.h>
+//#include <usb_class/cdc_desc.h>
 #include <stdarg.h>
 #include <string.h>
 
@@ -15,6 +15,8 @@
 #include "usb_conf.h"
 #include "usb_core.h"
 #include "usbd_int.h"
+#include "cdc_class.h"
+#include "cdc_desc.h"
 
 /** @addtogroup 415_USB_device_vcp_loopback USB_device_vcp_loopback
  * @{
@@ -23,6 +25,9 @@
 /* usb global struct define */
 otg_core_type otg_core_struct;
 uint8_t usb_buffer[256];
+void usb_clock48m_select(usb_clk48_s clk_s);
+void usb_gpio_config(void);
+void usb_low_power_wakeup_config(void);
 
 /**
  * @brief  usb delay millisecond function.
@@ -108,7 +113,7 @@ void usb_gpio_config(void) {
 #endif
 
 	/* otgfs use vbus pin */
-#ifdef USB_VBUS_IGNORE
+#ifndef USB_VBUS_IGNORE
 	gpio_init_struct.gpio_pins = OTG_PIN_VBUS;
 	gpio_init_struct.gpio_pull = GPIO_PULL_DOWN;
 	gpio_init_struct.gpio_mode = GPIO_MODE_INPUT;
