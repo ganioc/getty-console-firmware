@@ -169,6 +169,7 @@ int main(void)
         /* send data to host */
         if(usb_vcp_send_data(&otg_core_struct.dev, usb_buffer, data_len) == SUCCESS)
         {
+          printf("sent out\r\n");
           break;
         }
       }while(timeout --);

@@ -128,7 +128,15 @@ void uart_print_init(uint32_t baudrate)
   crm_periph_clock_enable(PRINT_UART_CRM_CLK, TRUE);
   crm_periph_clock_enable(PRINT_UART_TX_GPIO_CRM_CLK, TRUE);
 
+  // enable iomux clock,
+  crm_periph_clock_enable(CRM_IOMUX_PERIPH_CLOCK, TRUE);
+
+  // remap uart3 pc10
+  gpio_pin_remap_config(USART3_GMUX_0001,TRUE);
+
   gpio_default_para_init(&gpio_init_struct);
+
+
 
   /* configure the uart tx pin */
   gpio_init_struct.gpio_drive_strength = GPIO_DRIVE_STRENGTH_STRONGER;
