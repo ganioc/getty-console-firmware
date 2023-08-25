@@ -116,14 +116,6 @@ void EXINT0_IRQHandler(void)
   */
 int main(void)
 {
-//  uint8_t *buf = uart2_get_rx_buf();
-//  char  tx_buf[128];
-	  uint16_t data_len;
-
-	  uint32_t timeout;
-
-	  uint8_t send_zero_packet = 0;
-
   nvic_priority_group_config(NVIC_PRIORITY_GROUP_4);
 
   system_clock_config();
@@ -146,41 +138,19 @@ int main(void)
   while(1)
   {
     at32_led_toggle(LED2);
-    delay_ms(g_speed * DELAY);
+    delay_ms(3000);
     /* get usb vcp receive data */
-    data_len = usb_vcp_get_rxdata(&otg_core_struct.dev, usb_buffer);
+//    data_len = usb_vcp_get_rxdata(&otg_core_struct.dev, usb_buffer);
+    usb_rx();
+    usb_tx_printf("Hi\r\n");
 
-    if(data_len > 0 || send_zero_packet == 1)
-    {
-
-      /* bulk transfer is complete when the endpoint does one of the following
-         1 has transferred exactly the amount of data expected
-         2 transfers a packet with a payload size less than wMaxPacketSize or transfers a zero-length packet
-      */
-      if(data_len > 0)
-        send_zero_packet = 1;
-
-      if(data_len == 0)
-        send_zero_packet = 0;
-
-      timeout = 5000000;
-      do
-      {
-        /* send data to host */
-        if(usb_vcp_send_data(&otg_core_struct.dev, usb_buffer, data_len) == SUCCESS)
-        {
-          printf("sent out\r\n");
-          break;
-        }
-      }while(timeout --);
-    }
   }
 
   while(1){
 	  delay_sec(3);
 	  printf("run\r\n");
       /* send data to USB host */
-//	  usb_tx_printf("Hi\r\n");
+	  usb_tx_printf("Hi\r\n");
 //	  usb_rx();
 
   }

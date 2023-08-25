@@ -25,6 +25,9 @@
 /* usb global struct define */
 otg_core_type otg_core_struct;
 uint8_t usb_buffer[256];
+uint8_t usb_data_len;
+uint8_t send_zero_packet = 0;
+
 void usb_clock48m_select(usb_clk48_s clk_s);
 void usb_gpio_config(void);
 void usb_low_power_wakeup_config(void);
@@ -187,27 +190,64 @@ int usb_tx_printf(char* format, ...){
 	char temp[USB_BUFFER_LEN];
 	va_list args_list;
 	error_status status;
+	uint32_t timeout;
 
 	va_start(args_list, format);
 
 	vsprintf(temp, format, args_list);
 
+	timeout = 5000000;
+	do {
+		/* send data to host */
+		if (usb_vcp_send_data(&otg_core_struct.dev, temp, strlen(temp)) == SUCCESS) {
+			printf("sent out: %d\r\n", strlen(temp));
+			break;
+		}
+	} while (timeout--);
 
-	status = usb_vcp_send_data(&otg_core_struct.dev, temp, strlen(temp));
-
-	va_end(args_list);
-
-	if(status == SUCCESS){
-		return 0;
-	}else{
-		return -1;
-	}
+	return 0;
 }
-int usb_rx(void){
-	int data_len;
-    /* get usb vcp receive data */
-    data_len = usb_vcp_get_rxdata(&otg_core_struct.dev, usb_buffer);
+int usb_tx_raw(uint8_t *buf, uint16_t len){
+	uint32_t timeout;
+	timeout = 5000000;
 
-    printf("usb_rx:%d\r\n", data_len);
+	do {
+		/* send data to host */
+		if (usb_vcp_send_data(&otg_core_struct.dev, buf, len) == SUCCESS) {
+			printf("sent out: %d\r\n", len);
+			break;
+		}
+	} while (timeout--);
+
+	return 0;
+
+}
+
+/* bulk transfer is complete when the endpoint does one of the following
+         1 has transferred exactly the amount of data expected
+         2 transfers a packet with a payload size less than wMaxPacketSize or transfers a zero-length packet
+*/
+int usb_rx(void){
+    /* get usb vcp receive data */
+    usb_data_len = usb_vcp_get_rxdata(&otg_core_struct.dev, usb_buffer);
+
+    // printf("usb_rx:%d\r\n", usb_data_len);
+
+    if(usb_data_len > 0 || send_zero_packet == 1){
+    	if(usb_data_len > 0){
+    		send_zero_packet = 1;
+
+    		return usb_data_len;
+    	}
+    	if(usb_data_len == 0){
+    		send_zero_packet = 0;
+
+    		return 0;
+    	}
+
+    }
+
+    return -1;
+
 }
 

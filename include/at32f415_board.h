@@ -289,7 +289,7 @@ void usb_gpio_config(void);
 void usb_low_power_wakeup_config(void);
 void usb_init(void);
 int usb_tx_printf(char* format, ...);
-
+int usb_tx_raw(uint8_t *buf, uint16_t len);
 
 /************** version ******************/
 /******* version ********/
