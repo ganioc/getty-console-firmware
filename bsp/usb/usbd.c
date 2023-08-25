@@ -7,6 +7,10 @@
 
 #include <usb_class/cdc_class.h>
 #include <usb_class/cdc_desc.h>
+#include <stdarg.h>
+#include <string.h>
+
+
 #include "at32f415_board.h"
 #include "usb_conf.h"
 #include "usb_core.h"
@@ -172,5 +176,33 @@ void usb_init(void) {
 			USB_ID,
 			&cdc_class_handler,
 			&cdc_desc_handler);
+}
+
+int usb_tx_printf(char* format, ...){
+	char temp[USB_BUFFER_LEN];
+	va_list args_list;
+	error_status status;
+
+	va_start(args_list, format);
+
+	vsprintf(temp, format, args_list);
+
+
+	status = usb_vcp_send_data(&otg_core_struct.dev, temp, strlen(temp));
+
+	va_end(args_list);
+
+	if(status == SUCCESS){
+		return 0;
+	}else{
+		return -1;
+	}
+}
+int usb_rx(void){
+	int data_len;
+    /* get usb vcp receive data */
+    data_len = usb_vcp_get_rxdata(&otg_core_struct.dev, usb_buffer);
+
+    printf("usb_rx:%d\r\n", data_len);
 }
 

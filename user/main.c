@@ -109,6 +109,7 @@ int main(void)
 {
 //  uint8_t *buf = uart2_get_rx_buf();
 //  char  tx_buf[128];
+	int data_len;
 
   system_clock_config();
 
@@ -130,6 +131,11 @@ int main(void)
   while(1){
 	  delay_sec(3);
 	  printf("run\r\n");
+      /* send data to USB host */
+	  usb_tx_printf("Hi\r\n");
+
+	  usb_rx();
+
   }
 
 /*

@@ -288,17 +288,16 @@ void usb_clock48m_select(usb_clk48_s clk_s);
 void usb_gpio_config(void);
 void usb_low_power_wakeup_config(void);
 void usb_init(void);
-//struct oled_obj{
-//
-//};
+int usb_tx_printf(char* format, ...);
 
 
 /************** version ******************/
 /******* version ********/
-#define VERSION_STR      "1.0.2 "
+#define   VERSION_STR      "1.0.2 "
+#define   USB_BUFFER_LEN   2*1024
 char *get_version();
-
-
+int usb_tx_printf(char* format, ...);
+int usb_rx(void);
 /**
   * @}
   */
