@@ -42,6 +42,9 @@ open format, http://oleddisplay.squix.ch, font family, style and size, check the
 ### SPI
 
 
+### USB CDC virtual com port
+Use PB3 as detection of VBUS line, 5V . 0 - to computer port. 1 - to configuration and firmware updating.
+
 
 ## Firmware
 

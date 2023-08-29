@@ -180,6 +180,8 @@ void at32_board_init()
 
   init_i2c_1();
 
+  usb_detect_init();
+
 }
 
 /**

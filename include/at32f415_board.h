@@ -298,6 +298,16 @@ int usb_tx_raw(uint8_t *buf, uint16_t len);
 char *get_version();
 int usb_tx_printf(char* format, ...);
 int usb_rx(void);
+
+/************** io ***********************/
+
+#define USB_DETECT_PIN                     GPIO_PINS_3
+#define USB_DETECT_GPIO_PORT               GPIOB
+#define USB_DETECT_GPIO_CLK                CRM_GPIOB_PERIPH_CLOCK
+void usb_detect_init(void);
+uint8_t gpio_read(gpio_type* port, uint16_t pin);
+
+
 /**
   * @}
   */

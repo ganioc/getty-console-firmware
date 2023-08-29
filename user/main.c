@@ -144,6 +144,12 @@ int main(void)
     usb_rx();
     usb_tx_printf("Hi\r\n");
 
+    if(gpio_read(USB_DETECT_GPIO_PORT, USB_DETECT_PIN) == 0){
+    	printf("usb detect: %d\r\n", 0);
+    }else{
+    	printf("usb detect: %d\r\n", 1);
+    }
+
   }
 
   while(1){
