@@ -133,153 +133,16 @@ int main(void)
 
   oled_display_welcome();
 
-  printf("\r\nBefore loop\r\n");
+  if(gpio_read(USB_DETECT_GPIO_PORT, USB_DETECT_PIN) == 0){
+  	printf("usb detect: %d\r\n", 0);
 
-  while(1)
-  {
-    at32_led_toggle(LED2);
-    delay_ms(3000);
-    /* get usb vcp receive data */
-//    data_len = usb_vcp_get_rxdata(&otg_core_struct.dev, usb_buffer);
-    usb_rx();
-    usb_tx_printf("Hi\r\n");
+  	start_shell();
 
-    if(gpio_read(USB_DETECT_GPIO_PORT, USB_DETECT_PIN) == 0){
-    	printf("usb detect: %d\r\n", 0);
-    }else{
-    	printf("usb detect: %d\r\n", 1);
-    }
+  }else{
+  	printf("usb detect: %d\r\n", 1);
 
+  	start_config();
   }
-
-  while(1){
-	  delay_sec(3);
-	  printf("run\r\n");
-      /* send data to USB host */
-	  usb_tx_printf("Hi\r\n");
-//	  usb_rx();
-
-  }
-
-/*
-  delay_sec(3);
-
-  // send_to_console_0D0A();
-  read_from_console();
-
-  // send_to_console_0D0A();
-  // oled_display_login();
-  if(read_from_console() == CONSOLE_RX_TIMEOUT){
-	  // oled_display_login_timeout();
-	  printf("Err: wait login prompt timeout\r\n");
-	  // goto end;
-  }
-  printf("check login\r\n");
-  // check_login_prompt();
-
-  delay_sec(1);
-
-  printf("check login again\r\n");
-  send_to_console_0D0A();
-//  read_from_console();
-  oled_display_login();
-  if(read_from_console() == CONSOLE_RX_TIMEOUT){
-	  oled_display_login_timeout();
-	  printf("Err: wait login prompt timeout\r\n");
-	  goto end;
-  }
-  printf("check login prompt\r\n");
-  if(check_login_prompt() != 0){
-	  oled_display_login_wrong();
-	  printf("Err: login prompt wrong\r\n");
-	  goto end;
-  }
-
-  // check username
-  printf("send user\r\n");
-  oled_display_username();
-  send_to_console_username();
-  if(read_from_console() == CONSOLE_RX_TIMEOUT){
-	  oled_display_username_timeout();
-	  printf("Err: wait username input timeout\r\n");
-	  goto end;
-  }
-  printf("check username prompt\r\n");
-  if(check_passwd_prompt() != 0){
-	  oled_display_username_wrong();
-	  printf("Err: username prompt wrong\r\n");
-	  goto end;
-  }
-  printf("passwd prompt OK\r\n");
-
-  // check password
-  printf("send passwd\r\n");
-  oled_display_passwd();
-  send_to_console_passwd();
-  if(read_from_console() == CONSOLE_RX_TIMEOUT){
-	  oled_display_passwd_timeout();
-	  printf("Err: wait passwd resp timeout\r\n");
-	  goto end;
-  }
-  printf("check cmd line prompt\r\n");
-  if(check_cmdline_prompt() != 0){
-	  oled_display_cmdline_wrong();
-	  printf("Err: cmdline prompt wrong\r\n");
-	  goto end;
-  }
-  printf("cmdline prompt OK\r\n");
-  oled_display_cmdline();
-
-  delay_ms(2000);
-  oled_display_tasks();
-  printf("running tasks\r\n");
-
-  loop_tasks();
-
-
-
-end:
-
-  while(1){
-	  at32_led_toggle(LED2);
-	  delay_ms(g_speed * DELAY);
-  }
-
-  */
-
-//  while(1)
-//  {
-//    at32_led_toggle(LED2);
-//    delay_ms(g_speed * DELAY);
-//    at32_led_toggle(LED3);
-//    delay_ms(g_speed * DELAY);
-//    at32_led_toggle(LED4);
-//    delay_ms(g_speed * DELAY);
-//    if(uart2_get_rx_flag() == 1){
-//
-//    	for(int i =0; i< uart2_get_rx_len(); i++){
-//    		printf("%c", buf[i]);
-//    	}
-//
-//    	uart2_clear_rx_flag();
-//    	// printf("rx sth.\r\n");
-//
-//    	uart2_tx_printf("%s\n", "pi");
-//
-//    	if(uart2_get_rx_flag() == 1){
-//
-//        	for(int i =0; i< uart2_get_rx_len(); i++){
-//        		printf("%c", buf[i]);
-//        	}
-//        	uart2_clear_rx_flag();
-//    	}
-//
-//    }
-//	sprintf(tx_buf, "%s","higogo");
-//	uart2_tx_send(tx_buf, strlen(tx_buf));
-// uart2_tx_printf("begin...end\n");
-
-//  }
 }
 
 /**

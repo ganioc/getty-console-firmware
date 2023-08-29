@@ -307,6 +307,11 @@ int usb_rx(void);
 void usb_detect_init(void);
 uint8_t gpio_read(gpio_type* port, uint16_t pin);
 
+/************** config *******************/
+void start_config();
+
+/**************  shell *******************/
+void start_shell();
 
 /**
   * @}
